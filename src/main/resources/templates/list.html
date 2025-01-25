@@ -17,10 +17,28 @@
 
     <title>Список всех заданий</title>
 </head>
+
 <body>
 <div class="container-fluid p-0">
-    <header th:insert="blocks/header :: header"></header>
     <div class="container">
+
+        <!-- Ссылки для фильтрации -->
+        <div class="row mb-3">
+            <div class="col">
+                <a th:href="@{/}"
+                   th:classappend="${filter == null} ? 'active' : ''"
+                   class="btn btn-outline-primary">Все</a>
+
+                <a th:href="@{/(filter='completed')}"
+                   th:classappend="${filter == 'completed'} ? 'active' : ''"
+                   class="btn btn-outline-success">Выполненные</a>
+
+                <a th:href="@{/(filter='new')}"
+                   th:classappend="${filter == 'new'} ? 'active' : ''"
+                   class="btn btn-outline-warning">Новые</a>
+            </div>
+        </div>
+
         <div class="row">
             <table class="table">
                 <thead>
@@ -28,24 +46,22 @@
                     <th scope="col">#</th>
                     <th scope="col">Название</th>
                     <th scope="col">Дата создания</th>
-                    <th scope="col">Done</th>
+                    <th scope="col">Статус</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}">
                     <td th:text="${task.id}"></td>
                     <td>
-                        <a th:text="${task.title}"
-                           th:href="@{/list/{id}(id=${task.id})}">
-                        </a>
+                        <a th:text="${task.title}" th:href="@{/list/{id}(id=${task.id})}"></a>
                     </td>
                     <td th:text="${task.created}"></td>
-                    <td th:text="${task.done}"></td>
+                    <td th:text="${task.done ? 'Выполнено' : 'Новое'}"></td>
                 </tr>
-
                 </tbody>
             </table>
         </div>
+
         <div class="row">
             <div class="col text-end">
                 <form th:action="@{/create}" method="get">

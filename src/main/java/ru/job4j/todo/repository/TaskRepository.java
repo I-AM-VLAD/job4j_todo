@@ -19,4 +19,6 @@ public interface TaskRepository {
     Collection<Task> findNew();
 
     Optional<Task> findById(int id);
+
+    boolean doneTask(Task task);
 }

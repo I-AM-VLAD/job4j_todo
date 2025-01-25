@@ -72,9 +72,16 @@ public class HibernateTaskRepository implements TaskRepository {
         try {
             session = sf.openSession();
             transaction = session.beginTransaction();
-            session.update(task);
+            Query query = session.createQuery(
+                    "UPDATE Task t SET t.title = :title, t.description = :description WHERE t.id = :id"
+            );
+            query.setParameter("title", task.getTitle());
+            query.setParameter("description", task.getDescription());
+            query.setParameter("id", task.getId());
+
+            int updatedRows = query.executeUpdate();
             transaction.commit();
-            return true;
+            return updatedRows > 0;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -86,6 +93,7 @@ public class HibernateTaskRepository implements TaskRepository {
             }
         }
     }
+
 
     @Override
     public Collection<Task> findAll() {
@@ -158,6 +166,34 @@ public class HibernateTaskRepository implements TaskRepository {
 
             transaction.commit();
             return result;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public boolean doneTask(Task task) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sf.openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery(
+                    "UPDATE Task t SET t.done = :done WHERE t.id = :id"
+            );
+            query.setParameter("done", true);
+            query.setParameter("id", task.getId());
+
+            int updatedRows = query.executeUpdate();
+            transaction.commit();
+            return updatedRows > 0;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

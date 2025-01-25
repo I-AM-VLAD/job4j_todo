@@ -53,6 +53,13 @@
                 <button type="submit" class="btn btn-danger">Удалить</button>
             </form>
         </div>
+        <div class="row">
+            <form class="mt-3" th:action="@{/update/doneTask}" method="post">
+                <input type="hidden" name="id" th:value="${task.id}">
+                <button type="submit" class="btn btn-success">Выполнено</button>
+            </form>
+        </div>
+
     </div>
 </div>
 </body>

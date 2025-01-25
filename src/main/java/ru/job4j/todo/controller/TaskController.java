@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @ThreadSafe
@@ -20,26 +22,24 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping
-    public String getAll(Model model) {
-        model.addAttribute("tasks", taskService.findAll());
+    public String getTasks(@RequestParam(value = "filter", required = false) String filter, Model model) {
+        Collection<Task> tasks;
+
+        if ("completed".equals(filter)) {
+            tasks = taskService.findCompleted();
+        } else if ("new".equals(filter)) {
+            tasks = taskService.findNew();
+        } else {
+            tasks = taskService.findAll();
+        }
+
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("filter", filter);
         return "list";
     }
 
-    @GetMapping("/completed")
-    public String getCompleted(Model model) {
-        model.addAttribute("completed", taskService.findCompleted());
-        return "completed";
-    }
-
-    @GetMapping("/news")
-    public String getNew(Model model) {
-        model.addAttribute("news", taskService.findNew());
-        return "news";
-    }
-
     @GetMapping("/create")
-    public String getCreationPage(Model model) {
-        model.addAttribute("task", new Task());
+    public String getCreationPage() {
         return "create";
     }
 
@@ -55,10 +55,8 @@ public class TaskController {
 
         if (optionalTask.isPresent()) {
             model.addAttribute("task", optionalTask.get());
-            return "update";
-        } else {
-            return "404";
         }
+        return "update";
     }
 
     @PostMapping("/list/{id}/delete")
@@ -73,16 +71,33 @@ public class TaskController {
 
     @PostMapping("/update")
     public String update(@ModelAttribute Task task, Model model) {
-        try {
             var isUpdated = taskService.update(task);
             if (!isUpdated) {
                 model.addAttribute("message", "Задания с указанным идентификатором не найдено");
                 return "404";
             }
             return "redirect:/";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+    }
+
+    @PostMapping("/update/doneTask")
+    public String doneTask(@RequestParam("id") int id, Model model) {
+        Optional<Task> optionalTask = taskService.findById(id);
+
+        if (optionalTask.isEmpty()) {
+            model.addAttribute("message", "Задание с указанным идентификатором не найдено");
             return "404";
         }
+
+        Task task = optionalTask.get();
+        task.setDone(true);
+
+        boolean isDone = taskService.doneTask(task);
+        if (!isDone) {
+            model.addAttribute("message", "Не удалось обновить задание");
+            return "404";
+        }
+        return "redirect:/";
     }
+
+
 }
