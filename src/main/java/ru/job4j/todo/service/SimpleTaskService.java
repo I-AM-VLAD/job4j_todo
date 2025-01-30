@@ -6,6 +6,8 @@ import ru.job4j.todo.model.Task;
 import ru.job4j.todo.repository.TaskRepository;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,17 +33,20 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public Collection<Task> findAll() {
-        return taskRepository.findAll();
+        Collection<Task> tasks = taskRepository.findAll();
+        return tasks != null ? tasks : Collections.emptyList();
     }
 
     @Override
     public Collection<Task> findCompleted() {
-        return taskRepository.findCompleted();
+        Collection<Task> tasks = taskRepository.findCompleted();
+        return tasks != null ? tasks : Collections.emptyList();
     }
 
     @Override
     public Collection<Task> findNew() {
-        return taskRepository.findNew();
+        Collection<Task> tasks = taskRepository.findNew();
+        return tasks != null ? tasks : Collections.emptyList();
     }
 
     @Override

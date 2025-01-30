@@ -47,12 +47,13 @@ public class HibernateTaskRepository implements TaskRepository {
         try {
             session = sf.openSession();
             transaction = session.beginTransaction();
-            session.createQuery(
-                    "DELETE Task WHERE id = :id")
-                    .setParameter("id", id)
-                    .executeUpdate();
+            Query query = session.createQuery(
+                    "DELETE Task WHERE id = :id");
+            query.setParameter("id", id);
+            int updatedRows = query.executeUpdate();
             transaction.commit();
-            return true;
+
+            return updatedRows > 0;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

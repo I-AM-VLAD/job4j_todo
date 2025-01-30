@@ -9,9 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Supplier;
 
 @ThreadSafe
 @Controller
@@ -25,13 +24,14 @@ public class TaskController {
     public String getTasks(@RequestParam(value = "filter", required = false) String filter, Model model) {
         Collection<Task> tasks;
 
-        if ("completed".equals(filter)) {
-            tasks = taskService.findCompleted();
-        } else if ("new".equals(filter)) {
-            tasks = taskService.findNew();
-        } else {
-            tasks = taskService.findAll();
-        }
+        Map<String, Supplier<Collection<Task>>> filterMap = Map.of(
+                "completed", taskService::findCompleted,
+                "new", taskService::findNew
+        );
+
+        Supplier<Collection<Task>> supplier = filterMap.getOrDefault(filter, taskService::findAll);
+        Collection<Task> result = (supplier != null) ? supplier.get() : Collections.emptyList();
+        tasks = result;
 
         model.addAttribute("tasks", tasks);
         model.addAttribute("filter", filter);
@@ -55,9 +55,13 @@ public class TaskController {
 
         if (optionalTask.isPresent()) {
             model.addAttribute("task", optionalTask.get());
+            return "update";
+        } else {
+            model.addAttribute("message", "Задача с ID " + id + " не найдена");
+            return "404";
         }
-        return "update";
     }
+
 
     @PostMapping("/list/{id}/delete")
     public String delete(@PathVariable int id, Model model) {

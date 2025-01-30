@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String title;
     private String description;
     private LocalDateTime created = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS);
@@ -33,6 +33,6 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return (id != null) ? Objects.hash(id) : 0;
     }
 }
