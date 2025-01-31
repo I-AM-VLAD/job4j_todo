@@ -24,14 +24,13 @@ public class TaskController {
     public String getTasks(@RequestParam(value = "filter", required = false) String filter, Model model) {
         Collection<Task> tasks;
 
-        Map<String, Supplier<Collection<Task>>> filterMap = Map.of(
-                "completed", taskService::findCompleted,
-                "new", taskService::findNew
-        );
-
-        Supplier<Collection<Task>> supplier = filterMap.getOrDefault(filter, taskService::findAll);
-        Collection<Task> result = (supplier != null) ? supplier.get() : Collections.emptyList();
-        tasks = result;
+        if ("completed".equals(filter)) {
+            tasks = taskService.findCompleted();
+        } else if ("new".equals(filter)) {
+            tasks = taskService.findNew();
+        } else {
+            tasks = taskService.findAll();
+        }
 
         model.addAttribute("tasks", tasks);
         model.addAttribute("filter", filter);
