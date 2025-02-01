@@ -29,11 +29,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(Model model, @ModelAttribute User user) {
-        var savedUser = userService.save(user);
-        if (savedUser.isEmpty()) {
-            model.addAttribute("message", "Пользователь с таким логином уже существует");
-            return "404";
-        }
+        userService.save(user);
         return "redirect:/";
     }
 
