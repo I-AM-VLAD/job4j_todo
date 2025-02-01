@@ -26,7 +26,7 @@ public class HibernateUserRepository implements UserRepository {
             transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
-            return Optional.of(user);
+            return Optional.ofNullable(user);
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
