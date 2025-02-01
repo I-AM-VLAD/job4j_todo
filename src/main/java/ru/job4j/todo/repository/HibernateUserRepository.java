@@ -18,7 +18,7 @@ public class HibernateUserRepository implements UserRepository {
     private final SessionFactory sf;
 
     @Override
-    public Optional<User> save(User user) {
+    public User save(User user) {
         Transaction transaction = null;
         Session session = null;
         try {
@@ -26,7 +26,7 @@ public class HibernateUserRepository implements UserRepository {
             transaction = session.beginTransaction();
             session.save(user);
             transaction.commit();
-            return Optional.ofNullable(user);
+            return user;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
