@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,5 +33,18 @@ public class HibernateUserRepository implements UserRepository {
                         "password", password
                 )
         );
+    }
+
+    @Override
+    public Optional<User> findById(int id) {
+        return crudRepository.optional(
+                "from User as u where u.id = :id", User.class,
+                Map.of("id", id)
+        );
+    }
+
+    @Override
+    public Collection<User> findAll() {
+        return crudRepository.query("from User", User.class);
     }
 }

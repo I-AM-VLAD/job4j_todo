@@ -1,0 +1,5 @@
+ALTER TABLE tasks
+ADD CONSTRAINT fk_tasks_user
+FOREIGN KEY (user_id)
+REFERENCES todo_user(id)
+ON DELETE CASCADE;

@@ -19,13 +19,13 @@ import ru.job4j.todo.model.User;
 public class HibernateTaskRepository implements TaskRepository {
 
     private final CrudRepository crudRepository;
-    private final SessionFactory sf;
 
     @Override
     public Task save(Task task) {
         crudRepository.run(session -> session.persist(task));
         return task;
     }
+
 
     @Override
     public boolean deleteById(int id) {

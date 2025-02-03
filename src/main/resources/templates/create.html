@@ -30,6 +30,12 @@
             <label for="description">Описание</label>
             <textarea id="description" name="description" class="form-control"></textarea>
         </div>
+        <label for="user">Пользователь:</label>
+        <select id="user" name="userId" class="form-control">
+            <option value="">Выберите пользователя</option>
+            <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+        </select>
+
         <div class="form-group">
             <label for="done">Выполнено</label>
             <select id="done" name="done" class="form-control">

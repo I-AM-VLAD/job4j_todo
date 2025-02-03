@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
+import ru.job4j.todo.service.UserService;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -19,6 +21,8 @@ import java.util.function.Supplier;
 public class TaskController {
 
     private final TaskService taskService;
+
+    private final UserService userService;
 
     @GetMapping
     public String getTasks(@RequestParam(value = "filter", required = false) String filter, Model model) {
@@ -38,15 +42,21 @@ public class TaskController {
     }
 
     @GetMapping("/create")
-    public String getCreationPage() {
+    public String getCreationPage(Model model) {
+        Collection<User> users = userService.findAll();
+        model.addAttribute("users", users);
         return "create";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task) {
-            taskService.save(task);
-            return "redirect:/";
+    public String create(@ModelAttribute Task task, @RequestParam("userId") int userId) {
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь с ID " + userId + " не найден"));
+        task.setUser(user);
+        taskService.save(task);
+        return "redirect:/";
     }
+
 
     @GetMapping("/list/{id}")
     public String getTaskDetails(@PathVariable int id, Model model) {

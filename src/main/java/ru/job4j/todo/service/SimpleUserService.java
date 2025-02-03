@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.repository.UserRepository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -22,4 +23,16 @@ public class SimpleUserService implements UserService {
     public Optional<User> findByLoginAndPassword(String login, String password) {
         return userRepository.findByLoginAndPassword(login, password);
     }
+
+    @Override
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public Collection<User> findAll() {
+        return userRepository.findAll();
+    }
+
+
 }
