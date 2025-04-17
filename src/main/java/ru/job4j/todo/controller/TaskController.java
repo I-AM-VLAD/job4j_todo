@@ -6,8 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.service.UserService;
 
@@ -23,6 +25,8 @@ public class TaskController {
     private final TaskService taskService;
 
     private final UserService userService;
+
+    private final PriorityService priorityService;
 
     @GetMapping
     public String getTasks(@RequestParam(value = "filter", required = false) String filter, Model model) {
@@ -44,15 +48,20 @@ public class TaskController {
     @GetMapping("/create")
     public String getCreationPage(Model model) {
         Collection<User> users = userService.findAll();
+        Collection<Priority> priorities = priorityService.findAll();
         model.addAttribute("users", users);
+        model.addAttribute("priorities", priorities);
         return "create";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, @RequestParam("userId") int userId) {
+    public String create(@ModelAttribute Task task, @RequestParam("userId") int userId, @RequestParam("priorityId") int priorityId) {
         User user = userService.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь с ID " + userId + " не найден"));
         task.setUser(user);
+        Priority priority = priorityService.findById(priorityId)
+                .orElseThrow(() -> new IllegalArgumentException("Приоритет с ID " + priorityId + " не найден"));
+        task.setPriority(priority);
         taskService.save(task);
         return "redirect:/";
     }

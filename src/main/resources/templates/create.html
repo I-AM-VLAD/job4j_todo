@@ -36,6 +36,12 @@
             <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
         </select>
 
+        <label for="priority">Приоритет:</label>
+        <select id="priority" name="priorityId" class="form-control">
+            <option value="">Выберите приоритет</option>
+            <option th:each="priority : ${priorities}" th:value="${priority.id}" th:text="${priority.name}"></option>
+        </select>
+
         <div class="form-group">
             <label for="done">Выполнено</label>
             <select id="done" name="done" class="form-control">
