@@ -13,6 +13,7 @@ import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.service.UserService;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -55,16 +56,19 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, @RequestParam("userId") int userId, @RequestParam("priorityId") int priorityId) {
-        User user = userService.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Пользователь с ID " + userId + " не найден"));
+    public String create(@ModelAttribute Task task,
+                         HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            throw new IllegalStateException("Пользователь не авторизован");
+        }
+
         task.setUser(user);
-        Priority priority = priorityService.findById(priorityId)
-                .orElseThrow(() -> new IllegalArgumentException("Приоритет с ID " + priorityId + " не найден"));
-        task.setPriority(priority);
+
         taskService.save(task);
         return "redirect:/";
     }
+
 
 
     @GetMapping("/list/{id}")

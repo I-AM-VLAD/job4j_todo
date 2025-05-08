@@ -16,13 +16,13 @@ public class HibernatePriorityRepository implements PriorityRepository {
 
     @Override
     public Collection<Priority> findAll() {
-        return crudRepository.query("from Priority JOIN FETCH", Priority.class);
+        return crudRepository.query("from Priority", Priority.class);
     }
 
     @Override
     public Optional<Priority> findById(int priorityId) {
         return crudRepository.optional(
-                "from Priority as p JOIN FETCH where p.id = :id", Priority.class,
+                "from Priority as p where p.id = :id", Priority.class,
                 Map.of("id", priorityId)
         );
     }
