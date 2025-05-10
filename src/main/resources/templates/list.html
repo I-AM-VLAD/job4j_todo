@@ -50,6 +50,7 @@
                     <th scope="col">Пользователь</th>
                     <th scope="col">Дата создания</th>
                     <th scope="col">Статус</th>
+                    <th scope="col">Категория</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -62,6 +63,10 @@
                     <td th:text="${task.user != null ? task.user.name : 'Не назначен'}"></td>
                     <td th:text="${task.created}"></td>
                     <td th:text="${task.done ? 'Выполнено' : 'Новое'}"></td>
+                    <td>
+                        <span th:each="category : ${task.relationsTasksCategories}"
+                                th:text="${category.name} + ' '"></span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

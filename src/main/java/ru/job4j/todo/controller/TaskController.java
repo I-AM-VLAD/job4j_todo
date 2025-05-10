@@ -6,9 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 import ru.job4j.todo.service.UserService;
@@ -28,6 +30,8 @@ public class TaskController {
     private final UserService userService;
 
     private final PriorityService priorityService;
+
+    private final CategoryService categoryService;
 
     @GetMapping
     public String getTasks(@RequestParam(value = "filter", required = false) String filter, Model model) {
@@ -50,8 +54,10 @@ public class TaskController {
     public String getCreationPage(Model model) {
         Collection<User> users = userService.findAll();
         Collection<Priority> priorities = priorityService.findAll();
+        Collection<Category> categories = categoryService.findAll();
         model.addAttribute("users", users);
         model.addAttribute("priorities", priorities);
+        model.addAttribute("categories", categories);
         return "create";
     }
 
