@@ -43,7 +43,7 @@
         </select>
 
         <label for="category">Выберите категории:</label>
-        <select id="category" name="category.id" multiple size="5" class="form-control">
+        <select id="category" name="categories" multiple size="5" class="form-control">
             <option th:each="category : ${categories}"
                     th:value="${category.id}"
                     th:text="${category.name}">

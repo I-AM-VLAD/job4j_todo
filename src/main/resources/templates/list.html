@@ -64,7 +64,7 @@
                     <td th:text="${task.created}"></td>
                     <td th:text="${task.done ? 'Выполнено' : 'Новое'}"></td>
                     <td>
-                        <span th:each="category : ${task.relationsTasksCategories}"
+                        <span th:each="category : ${task.categories}"
                                 th:text="${category.name} + ' '"></span>
                     </td>
                 </tr>

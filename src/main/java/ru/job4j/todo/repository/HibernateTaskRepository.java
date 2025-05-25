@@ -47,7 +47,7 @@ public class HibernateTaskRepository implements TaskRepository {
         String hql = "SELECT DISTINCT t FROM Task t"
                 + " LEFT JOIN FETCH t.user"
                 + " LEFT JOIN FETCH t.priority"
-                + " LEFT JOIN FETCH t.relationsTasksCategories";
+                + " LEFT JOIN FETCH t.categories";
         return crudRepository.query(hql, Task.class);
     }
 

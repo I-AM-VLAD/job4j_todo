@@ -63,19 +63,27 @@ public class TaskController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute Task task,
-                         HttpSession session) {
+                         @RequestParam("categoryIds") List<Integer> categoryIds, HttpSession session) {
+
         User user = (User) session.getAttribute("user");
         if (user == null) {
             throw new IllegalStateException("Пользователь не авторизован");
         }
 
-        task.setUser(user);
+        List<Optional> categoriesOptional = categoryService.findByIds(categoryIds);
+        List<Category> categories = new ArrayList<>();
 
+        for (Optional one : categoriesOptional) {
+            if (one.isPresent()) {
+                categories.add((Category) one.get());
+            }
+        }
+
+        task.setUser(user);
+        task.setCategories(categories);
         taskService.save(task);
         return "redirect:/";
     }
-
-
 
     @GetMapping("/list/{id}")
     public String getTaskDetails(@PathVariable int id, Model model) {

@@ -35,7 +35,7 @@ public class Task {
             joinColumns = { @JoinColumn(name = "task_id") },
             inverseJoinColumns = { @JoinColumn(name = "category_id") }
     )
-    private List<Category> relationsTasksCategories = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
