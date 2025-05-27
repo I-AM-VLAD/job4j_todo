@@ -16,8 +16,10 @@ public class HibernateCategoryRepository implements CategoryRepository {
     public List<Optional> findByIds(List<Integer> ids) {
         List<Optional> result = new ArrayList<>();
         for (Integer id : ids) {
-            result.add(crudRepository.optional("from Category as c where c.id = :id ", Category.class,
-                    Map.of("id", ids.get(id))));
+            result.add(
+                    crudRepository.optional("from Category as c where c.id = :id ", Category.class,
+                            Map.of("id", id))
+            );
         }
         return result;
     }
