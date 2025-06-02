@@ -34,5 +34,10 @@ public class SimpleUserService implements UserService {
         return userRepository.findAll();
     }
 
+    @Override
+    public void saveTimeZones() {
+         userRepository.saveTimeZones();
+    }
+
 
 }

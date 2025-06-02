@@ -13,4 +13,6 @@ public interface UserRepository {
     Optional<User> findById(int id);
 
     Collection<User> findAll();
+
+    void saveTimeZones();
 }

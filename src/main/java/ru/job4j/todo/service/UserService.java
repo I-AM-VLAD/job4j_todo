@@ -13,4 +13,6 @@ public interface UserService {
     Optional<User> findById(int id);
 
     Collection<User> findAll();
+
+    void saveTimeZones();
 }

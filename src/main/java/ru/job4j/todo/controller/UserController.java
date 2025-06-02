@@ -24,6 +24,10 @@ public class UserController {
 
     @GetMapping({"/", "/register"})
     public String getRegistrationPage(Model model) {
+        userService.saveTimeZones();
+
+        var timeZones = userService.findAllTimeZones();
+        model.addAttribute("timeZones", timeZones);
         return "users/register";
     }
 

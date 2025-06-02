@@ -9,9 +9,7 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @AllArgsConstructor
@@ -47,4 +45,21 @@ public class HibernateUserRepository implements UserRepository {
     public Collection<User> findAll() {
         return crudRepository.query("from User", User.class);
     }
+
+    @Override
+    public void saveTimeZones() {
+        var zones = new ArrayList<TimeZone>();
+        for (String timeId : TimeZone.getAvailableIDs()) {
+            zones.add(TimeZone.getTimeZone(timeId));
+        }
+        for (TimeZone zone : zones) {
+            crudRepository.run(session -> session.persist(zone));
+        }
+    }
+
+    @Override
+    public Collection<Zone> findAllZones() {
+        return crudRepository.query("from Zone", Zone.class);
+    }
+
 }
