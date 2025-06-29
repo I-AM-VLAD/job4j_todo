@@ -28,6 +28,14 @@
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
 
+            <label for="zone">Выберите временную зону:</label>
+            <select id="zone" name="timezone" class="form-control">
+                <option th:each="zone : ${zones}"
+                        th:value="${zone.getID()}"
+                        th:text="${zone.getID()}">
+                </option>
+            </select>
+
 
             <div class="mb-3 row">
                 <div class="col-6"></div>

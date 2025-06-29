@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">News1</string>
-    <string name="logo">Последние новости</string>
-    <string name="hint_user_field">Поиск новостей...</string>
-    <string name="main_btn">Найти</string> </resources>

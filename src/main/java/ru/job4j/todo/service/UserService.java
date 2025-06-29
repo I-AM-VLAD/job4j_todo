@@ -14,5 +14,4 @@ public interface UserService {
 
     Collection<User> findAll();
 
-    void saveTimeZones();
 }

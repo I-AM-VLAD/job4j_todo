@@ -46,20 +46,5 @@ public class HibernateUserRepository implements UserRepository {
         return crudRepository.query("from User", User.class);
     }
 
-    @Override
-    public void saveTimeZones() {
-        var zones = new ArrayList<TimeZone>();
-        for (String timeId : TimeZone.getAvailableIDs()) {
-            zones.add(TimeZone.getTimeZone(timeId));
-        }
-        for (TimeZone zone : zones) {
-            crudRepository.run(session -> session.persist(zone));
-        }
-    }
-
-    @Override
-    public Collection<Zone> findAllZones() {
-        return crudRepository.query("from Zone", Zone.class);
-    }
 
 }
